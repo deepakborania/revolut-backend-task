@@ -7,6 +7,8 @@ import com.revolut.task.repositories.AccountsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+
 @Singleton
 public class AccountServiceImpl implements AccountService {
 
@@ -31,8 +33,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccount(int id) {
         LOGGER.info("Fetching account, id: {}", id);
-        Account account = accountsRepository.getAccountByID(id).orElse(null);
-        return account;
+        return accountsRepository.getAccountByID(id).orElse(null);
 
+    }
+
+    @Override
+    public Account deposit(int id, String curr, BigDecimal amount) {
+        LOGGER.info("Depositing {} {} amount in account# {}", curr, amount, id);
+        return accountsRepository.depositMoneyInAccount(id, curr, amount).get();
     }
 }

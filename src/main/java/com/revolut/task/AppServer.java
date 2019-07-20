@@ -37,6 +37,8 @@ public class AppServer {
         path("/accounts", () -> {
             get("/:id", this.accountHandlers.getAccountById(), json);
             post("/create", this.accountHandlers.createAccount(), json);
+            put("/:id/deposit/:currency/:amount", this.accountHandlers.depositAmount(), json);
+            put("/:id/withdraw/:currency/:amount", this.accountHandlers.withdrawAmount(), json);
         });
     }
 

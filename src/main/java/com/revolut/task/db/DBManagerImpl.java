@@ -27,6 +27,7 @@ public class DBManagerImpl implements DBManager {
             cDataSource.setPassword("");
 //            cDataSource.setJdbcUrl("jdbc:h2:file:./my_db");
             cDataSource.setJdbcUrl("jdbc:h2:mem:my_db");
+            cDataSource.setConnectionCustomizerClassName("com.revolut.task.db.IsolationLevelCustomizer");
         } catch (Exception e) {
             e.printStackTrace();
         }

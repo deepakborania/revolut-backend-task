@@ -1,4 +1,4 @@
-package com.revolut.task;
+package com.revolut.task.exceptions;
 
 public class AccountNotFoundException extends RuntimeException {
 

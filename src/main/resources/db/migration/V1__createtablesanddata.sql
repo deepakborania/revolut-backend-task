@@ -32,6 +32,15 @@ create table currency
   updated_on timestamp NULL
 );
 
+CREATE table transactions
+(
+  id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  from_account INT NOT NULL,
+  to_account int not null,
+  amount DECIMAL not null,
+  created_on timestamp DEFAULT CURRENT_TIMESTAMP() NOT NULL,
+);
+
 INSERT INTO currency (name, code, factor, symbol)
 VALUES
   ('Pounds', 'GBP', 1, '£'),
