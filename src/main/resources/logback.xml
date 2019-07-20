@@ -8,9 +8,17 @@
         </layout>
     </appender>
 
-    <!--<logger name="com.mkyong" level="debug" additivity="false">-->
-        <!--<appender-ref ref="CONSOLE"/>-->
-    <!--</logger>-->
+    <appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.jooq" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE2"/>
+    </logger>
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>

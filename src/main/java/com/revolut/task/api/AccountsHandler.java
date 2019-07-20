@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.revolut.task.di.InjectorProvider;
 import com.revolut.task.models.tables.pojos.Account;
 import com.revolut.task.service.AccountService;
+import com.revolut.task.service.TransactionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -16,12 +17,14 @@ import java.math.BigDecimal;
 public class AccountsHandler {
 
     private final AccountService accountService;
+    private final TransactionService transactionService;
 
     private static final Gson gson = new Gson();
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountsHandler.class);
 
     public AccountsHandler() {
         this.accountService = InjectorProvider.provide().getInstance(AccountService.class);
+        this.transactionService = InjectorProvider.provide().getInstance(TransactionService.class);
     }
 
     public Route getAccountById() {
@@ -67,7 +70,7 @@ public class AccountsHandler {
     public Route depositAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
-            return accountService.deposit(Integer.parseInt(req.params(":id")),
+            return transactionService.deposit(Integer.parseInt(req.params(":id")),
                     req.params(":currency"),
                     NumberUtils.createBigDecimal(req.params(":amount")));
         };
@@ -76,7 +79,7 @@ public class AccountsHandler {
     public Route withdrawAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
-            return accountService.deposit(Integer.parseInt(req.params(":id")),
+            return transactionService.deposit(Integer.parseInt(req.params(":id")),
                     req.params(":currency"),
                     NumberUtils.createBigDecimal(req.params(":amount")).negate());
         };

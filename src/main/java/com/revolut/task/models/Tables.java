@@ -6,6 +6,7 @@ package com.revolut.task.models;
 
 import com.revolut.task.models.tables.Account;
 import com.revolut.task.models.tables.Currency;
+import com.revolut.task.models.tables.Transactions;
 
 import javax.annotation.Generated;
 
@@ -32,4 +33,9 @@ public class Tables {
      * The table <code>PUBLIC.CURRENCY</code>.
      */
     public static final Currency CURRENCY = com.revolut.task.models.tables.Currency.CURRENCY;
+
+    /**
+     * The table <code>PUBLIC.TRANSACTIONS</code>.
+     */
+    public static final Transactions TRANSACTIONS = com.revolut.task.models.tables.Transactions.TRANSACTIONS;
 }

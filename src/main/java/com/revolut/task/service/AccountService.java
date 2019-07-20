@@ -10,5 +10,4 @@ public interface AccountService {
 
     Account getAccount(int id);
 
-    Account deposit(int id, String curr, BigDecimal amount);
 }

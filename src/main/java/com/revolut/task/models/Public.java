@@ -6,6 +6,7 @@ package com.revolut.task.models;
 
 import com.revolut.task.models.tables.Account;
 import com.revolut.task.models.tables.Currency;
+import com.revolut.task.models.tables.Transactions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 750527294;
+    private static final long serialVersionUID = 76227872;
 
     /**
      * The reference instance of <code>PUBLIC</code>
@@ -47,6 +48,11 @@ public class Public extends SchemaImpl {
      * The table <code>PUBLIC.CURRENCY</code>.
      */
     public final Currency CURRENCY = com.revolut.task.models.tables.Currency.CURRENCY;
+
+    /**
+     * The table <code>PUBLIC.TRANSACTIONS</code>.
+     */
+    public final Transactions TRANSACTIONS = com.revolut.task.models.tables.Transactions.TRANSACTIONS;
 
     /**
      * No further instances allowed
@@ -74,6 +80,7 @@ public class Public extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Account.ACCOUNT,
-            Currency.CURRENCY);
+            Currency.CURRENCY,
+            Transactions.TRANSACTIONS);
     }
 }

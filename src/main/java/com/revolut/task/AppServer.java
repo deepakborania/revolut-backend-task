@@ -1,6 +1,7 @@
 package com.revolut.task;
 
 import com.revolut.task.api.AccountsHandler;
+import com.revolut.task.api.TransactionsHandler;
 import com.revolut.task.utils.JsonTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,17 +14,27 @@ public class AppServer {
     private static final JsonTransformer json = new JsonTransformer();
 
     private AccountsHandler accountHandlers;
+    private TransactionsHandler transactionsHandlers;
 
     public void startServer() {
         System.getProperties().setProperty("org.jooq.no-logo", "true");
         port(8080);
 
         this.accountHandlers = new AccountsHandler();
+        this.transactionsHandlers = new TransactionsHandler();
+
+        before((req, res) -> {
+            LOGGER.info("Request received. METHOD={}, Path={}, Request={}", req.requestMethod(), req.pathInfo(), req.body());
+        });
+
         path("/api", () -> {
-            before((req, res) -> {
-                LOGGER.info("Request received. Path={}, Request={}", req.contextPath(), req.body());
-            });
+
             registerAccountHandlers();
+            registerTransactionHandlers();
+        });
+
+        after((req, res) -> {
+            LOGGER.info("Response => METHOD={}, Path={}, Reponse={}, Content-Type={}", req.requestMethod(), req.pathInfo(), res.body(), res.type());
         });
 
         exception(Exception.class, new ErrorHandler());
@@ -39,6 +50,12 @@ public class AppServer {
             post("/create", this.accountHandlers.createAccount(), json);
             put("/:id/deposit/:currency/:amount", this.accountHandlers.depositAmount(), json);
             put("/:id/withdraw/:currency/:amount", this.accountHandlers.withdrawAmount(), json);
+        });
+    }
+
+    private void registerTransactionHandlers() {
+        path("/txn", () -> {
+            get("/:id", this.transactionsHandlers.fetchTransactions(), json);
         });
     }
 

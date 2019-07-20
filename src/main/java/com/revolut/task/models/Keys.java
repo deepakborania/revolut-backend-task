@@ -6,8 +6,10 @@ package com.revolut.task.models;
 
 import com.revolut.task.models.tables.Account;
 import com.revolut.task.models.tables.Currency;
+import com.revolut.task.models.tables.Transactions;
 import com.revolut.task.models.tables.records.AccountRecord;
 import com.revolut.task.models.tables.records.CurrencyRecord;
+import com.revolut.task.models.tables.records.TransactionsRecord;
 
 import javax.annotation.Generated;
 
@@ -36,6 +38,7 @@ public class Keys {
 
     public static final Identity<AccountRecord, Integer> IDENTITY_ACCOUNT = Identities0.IDENTITY_ACCOUNT;
     public static final Identity<CurrencyRecord, Integer> IDENTITY_CURRENCY = Identities0.IDENTITY_CURRENCY;
+    public static final Identity<TransactionsRecord, Integer> IDENTITY_TRANSACTIONS = Identities0.IDENTITY_TRANSACTIONS;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -44,6 +47,7 @@ public class Keys {
     public static final UniqueKey<AccountRecord> CONSTRAINT_E = UniqueKeys0.CONSTRAINT_E;
     public static final UniqueKey<CurrencyRecord> CONSTRAINT_5 = UniqueKeys0.CONSTRAINT_5;
     public static final UniqueKey<CurrencyRecord> CONSTRAINT_50 = UniqueKeys0.CONSTRAINT_50;
+    public static final UniqueKey<TransactionsRecord> CONSTRAINT_F = UniqueKeys0.CONSTRAINT_F;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -57,11 +61,13 @@ public class Keys {
     private static class Identities0 {
         public static Identity<AccountRecord, Integer> IDENTITY_ACCOUNT = Internal.createIdentity(Account.ACCOUNT, Account.ACCOUNT.ID);
         public static Identity<CurrencyRecord, Integer> IDENTITY_CURRENCY = Internal.createIdentity(Currency.CURRENCY, Currency.CURRENCY.ID);
+        public static Identity<TransactionsRecord, Integer> IDENTITY_TRANSACTIONS = Internal.createIdentity(Transactions.TRANSACTIONS, Transactions.TRANSACTIONS.ID);
     }
 
     private static class UniqueKeys0 {
         public static final UniqueKey<AccountRecord> CONSTRAINT_E = Internal.createUniqueKey(Account.ACCOUNT, "CONSTRAINT_E", Account.ACCOUNT.ID);
         public static final UniqueKey<CurrencyRecord> CONSTRAINT_5 = Internal.createUniqueKey(Currency.CURRENCY, "CONSTRAINT_5", Currency.CURRENCY.ID);
         public static final UniqueKey<CurrencyRecord> CONSTRAINT_50 = Internal.createUniqueKey(Currency.CURRENCY, "CONSTRAINT_50", Currency.CURRENCY.CODE);
+        public static final UniqueKey<TransactionsRecord> CONSTRAINT_F = Internal.createUniqueKey(Transactions.TRANSACTIONS, "CONSTRAINT_F", Transactions.TRANSACTIONS.ID);
     }
 }

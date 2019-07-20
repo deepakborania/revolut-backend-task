@@ -35,10 +35,12 @@ create table currency
 CREATE table transactions
 (
   id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
-  from_account INT NOT NULL,
-  to_account int not null,
+  from_account INT default 0,
+  to_account int default 0,
+  currency varchar(3) not null,
   amount DECIMAL not null,
-  created_on timestamp DEFAULT CURRENT_TIMESTAMP() NOT NULL,
+  converted_amount DECIMAL not null,
+  created_on timestamp DEFAULT CURRENT_TIMESTAMP() NOT NULL
 );
 
 INSERT INTO currency (name, code, factor, symbol)

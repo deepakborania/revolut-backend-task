@@ -36,10 +36,4 @@ public class AccountServiceImpl implements AccountService {
         return accountsRepository.getAccountByID(id).orElse(null);
 
     }
-
-    @Override
-    public Account deposit(int id, String curr, BigDecimal amount) {
-        LOGGER.info("Depositing {} {} amount in account# {}", curr, amount, id);
-        return accountsRepository.depositMoneyInAccount(id, curr, amount).get();
-    }
 }
