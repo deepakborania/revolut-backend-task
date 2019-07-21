@@ -70,18 +70,36 @@ public class AccountsHandler {
     public Route depositAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
-            return transactionService.deposit(Integer.parseInt(req.params(":id")),
+
+            boolean status = transactionService.deposit(Integer.parseInt(req.params(":id")),
                     req.params(":currency"),
                     NumberUtils.createBigDecimal(req.params(":amount")));
+            if (!status) {
+                resp.status(500);
+                resp.type("application/json");
+                return new BaseResponse("Could not transfer");
+            }
+            resp.status(200);
+            resp.type("application/json");
+            return new BaseResponse("Transferred");
+
         };
     }
 
     public Route withdrawAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
-            return transactionService.deposit(Integer.parseInt(req.params(":id")),
+            boolean status = transactionService.deposit(Integer.parseInt(req.params(":id")),
                     req.params(":currency"),
                     NumberUtils.createBigDecimal(req.params(":amount")).negate());
+            if (!status) {
+                resp.status(500);
+                resp.type("application/json");
+                return new BaseResponse("Could not transfer");
+            }
+            resp.status(200);
+            resp.type("application/json");
+            return new BaseResponse("Transferred");
         };
     }
 

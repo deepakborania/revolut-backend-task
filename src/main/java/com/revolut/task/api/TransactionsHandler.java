@@ -24,4 +24,10 @@ public class TransactionsHandler {
             return transactionService.fetchAllTransactions(Integer.parseInt(id));
         };
     }
+
+    public Route transfer() {
+        return (req, res) -> {
+            return null;
+        };
+    }
 }

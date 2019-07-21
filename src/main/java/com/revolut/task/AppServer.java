@@ -5,6 +5,7 @@ import com.revolut.task.api.TransactionsHandler;
 import com.revolut.task.utils.JsonTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.Spark;
 
 import static spark.Spark.*;
 
@@ -44,10 +45,15 @@ public class AppServer {
         });
     }
 
+    public void stopServer() {
+        Spark.stop();
+        Spark.awaitStop();
+    }
+
     private void registerAccountHandlers() {
         path("/accounts", () -> {
             get("/:id", this.accountHandlers.getAccountById(), json);
-            post("/create", this.accountHandlers.createAccount(), json);
+            post("", this.accountHandlers.createAccount(), json);
             put("/:id/deposit/:currency/:amount", this.accountHandlers.depositAmount(), json);
             put("/:id/withdraw/:currency/:amount", this.accountHandlers.withdrawAmount(), json);
         });
@@ -56,6 +62,7 @@ public class AppServer {
     private void registerTransactionHandlers() {
         path("/txn", () -> {
             get("/:id", this.transactionsHandlers.fetchTransactions(), json);
+            post("/transfer/:fromID/:toID/:currency/:amount", this.transactionsHandlers.transfer(), json);
         });
     }
 

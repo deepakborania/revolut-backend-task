@@ -10,7 +10,7 @@ import com.revolut.task.models.tables.pojos.Account;
 import com.revolut.task.models.tables.pojos.Transactions;
 import com.revolut.task.models.tables.records.AccountRecord;
 import com.revolut.task.models.tables.records.CurrencyRecord;
-import com.revolut.task.models.tables.records.TransactionsRecord;
+import com.revolut.task.service.LockService;
 import org.jooq.Configuration;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.revolut.task.models.Tables.ACCOUNT;
-import static com.revolut.task.models.Tables.CURRENCY;
-import static com.revolut.task.models.Tables.TRANSACTIONS;
+import static com.revolut.task.models.Tables.*;
 
 public class TransactionsRepositoryImpl implements TransactionsRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionsRepositoryImpl.class);
