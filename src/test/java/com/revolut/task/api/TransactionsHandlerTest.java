@@ -35,18 +35,11 @@ public class TransactionsHandlerTest {
     @Test
     void multiTransferAmount() {
 
-//        given()
-//                .put("/api/accounts/10001/deposit/GBP/100")
-//                .then()
-//                .log().body()
-//                .assertThat().contentType("application/json")
-//                .assertThat().statusCode(200);
-
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             executorService.submit(() -> {
                 given()
-                        .post("/api/txn/transfer/10002/10001/GBP/1")
+                        .post("/api/txn/transfer/10006/10005/GBP/1")
                         .then()
                         .log().body()
                         .assertThat().contentType("application/json")
@@ -68,16 +61,16 @@ public class TransactionsHandlerTest {
             executorService.shutdownNow();
         }
         given()
-                .get("/api/accounts/10001")
+                .get("/api/accounts/10005")
                 .then().log().body()
                 .assertThat().contentType("application/json")
                 .assertThat().statusCode(200)
-                .assertThat().body("balance", equalTo("GBP 100"));
+                .assertThat().body("balance", equalTo("GBP 50"));
         given()
                 .get("/api/accounts/10003")
                 .then().log().body()
                 .assertThat().contentType("application/json")
                 .assertThat().statusCode(200)
-                .assertThat().body("balance", equalTo("INR 100"));
+                .assertThat().body("balance", equalTo("INR 50"));
     }
 }

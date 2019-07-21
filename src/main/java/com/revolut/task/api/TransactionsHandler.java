@@ -2,6 +2,7 @@ package com.revolut.task.api;
 
 import com.google.inject.Inject;
 import com.revolut.task.di.InjectorProvider;
+import com.revolut.task.models.tables.pojos.Transactions;
 import com.revolut.task.service.TransactionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import spark.Route;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class TransactionsHandler {
 
@@ -25,7 +27,10 @@ public class TransactionsHandler {
     public Route fetchTransactions() {
         return (req, res) -> {
             String id = req.params(":id");
-            return transactionService.fetchAllTransactions(Integer.parseInt(id));
+            List<Transactions> txns = transactionService.fetchAllTransactions(Integer.parseInt(id));
+            return TransactionsResponse.Builder.aTransactionsResponse()
+                    .withTransactions(txns)
+                    .build();
         };
     }
 
@@ -56,11 +61,14 @@ public class TransactionsHandler {
             if (!status) {
                 response.status(500);
                 response.type("application/json");
-                return new BaseResponse("Could not transfer");
+                return BaseResponse.Builder.aBaseResponse()
+                        .withMessage("Could not transfer")
+                        .withStatus(1);
             }
             response.status(200);
             response.type("application/json");
-            return new BaseResponse("Transferred");
+            return BaseResponse.Builder.aBaseResponse()
+                    .withMessage("Transferred");
         };
     }
 }

@@ -54,4 +54,6 @@ VALUES
   (10001, 'Savings Account', 0, true, 'GBP'),
   (10002, 'Savings Account', 100, true, 'GBP'),
   (10003, 'INR Savings Account', 0, true, 'INR'),
-  (10004, 'INR Current Account', 100, true, 'INR');
+  (10004, 'INR Current Account', 100, true, 'INR'),
+  (10005, 'Savings Account', 0, true, 'GBP'),
+  (10006, 'Savings Account', 100, true, 'GBP');
