@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Singleton
 public class AccountServiceImpl implements AccountService {
@@ -34,13 +35,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccount(int id) {
+    public Account getAccount(int id) throws Exception {
         LOGGER.info("Fetching account, id: {}", id);
-        try {
-            return lockService.runInLock(id, () -> accountsRepository.getAccountByID(id).orElse(null));
-        } catch (Exception e) {
-            LOGGER.error("Error in fetching account", e);
-        }
-        return null;
+        return lockService.runInLock(id, () -> accountsRepository.getAccountByID(id).orElse(null));
+    }
+
+    @Override
+    public boolean closeAccount(int accountID) throws Exception {
+        LOGGER.info("Marking account {} inactive", accountID);
+        return lockService.runInLock(accountID, () -> accountsRepository.closeAccount(accountID));
+
     }
 }

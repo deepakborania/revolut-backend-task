@@ -37,5 +37,6 @@ Following end points have been implemented:
 |/api/accounts|POST|Create a new account|`curl -X POST localhost:8080/api/accounts -d '{"name": "Savings Account", "currencyCode": "INR"}'`|
 |/api/accounts/:id/deposit/:currency/:amount|PUT|Deposit money in account|`curl -X PUT localhost:8080/api/accounts/10001/deposit/GBP/100`|
 |/api/accounts/:id/withdraw/:currency/:amount|PUT|Deposit money in account|`curl -X PUT localhost:8080/api/accounts/10001/withdraw/GBP/100`|
+|/api/accounts/:id|DELETE|Mark account inactive|`curl -X DELETE localhost:8080/api/accounts/10006`|
 |/api/txn/transfer/:fromID/:toID/:currency/:amount|POST|Transfer money from account *fromID* to *toID* with the given currency|` curl -X POST localhost:8080/api/txn/transfer/10002/10001/GBP/10`|
 |/api/txn/:id|GET|Get list of all transactions which involves this account|`curl localhost:8080/api/txn/10001`|

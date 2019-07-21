@@ -3,6 +3,7 @@ package com.revolut.task.repositories;
 import com.google.inject.Inject;
 import com.revolut.task.db.DBManager;
 import com.revolut.task.di.InjectorProvider;
+import com.revolut.task.exceptions.AccountInactiveException;
 import com.revolut.task.exceptions.AccountNotFoundException;
 import com.revolut.task.exceptions.CurrencyNotFoundException;
 import com.revolut.task.exceptions.NegativeBalanceException;
@@ -79,6 +80,9 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
                 .fetchOne();
         if (accountRecord == null) {
             throw new AccountNotFoundException(id);
+        }
+        if (!Boolean.TRUE.equals(accountRecord.getActive())) {
+            throw new AccountInactiveException(id);
         }
         BigDecimal normAmt = amount;
         if (!currencyRecord.getCode().equalsIgnoreCase(accountRecord.getCurrencyCode())) {

@@ -8,6 +8,7 @@ public interface AccountService {
 
     Account createAccount(String name, String currency) throws Exception;
 
-    Account getAccount(int id);
+    Account getAccount(int id) throws Exception;
 
+    boolean closeAccount(int accountID) throws Exception;
 }

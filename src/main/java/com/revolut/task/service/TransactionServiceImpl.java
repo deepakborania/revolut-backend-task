@@ -3,7 +3,6 @@ package com.revolut.task.service;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.revolut.task.di.InjectorProvider;
-import com.revolut.task.models.tables.pojos.Account;
 import com.revolut.task.models.tables.pojos.Transactions;
 import com.revolut.task.repositories.TransactionsRepository;
 import org.slf4j.Logger;
@@ -33,27 +32,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public boolean deposit(int id, String curr, BigDecimal amount) {
+    public boolean deposit(int id, String curr, BigDecimal amount) throws Exception {
         LOGGER.info("Depositing {} {} amount in account# {}", curr, amount, id);
-        try {
-            lockService.runInLock(id, () -> transactionsRepository.depositMoneyInAccount(id, curr.toUpperCase(), amount).get());
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Error in depositing {} {} amount in account# {}", curr, amount, id);
-            return false;
-        }
+        lockService.runInLock(id,
+                () -> transactionsRepository.depositMoneyInAccount(id, curr.toUpperCase(), amount).get());
+        return true;
     }
 
     @Override
-    public boolean transfer(int fromAccountID, int toAccountID, String currency, BigDecimal amount) {
+    public boolean transfer(int fromAccountID, int toAccountID, String currency, BigDecimal amount) throws Exception {
         LOGGER.info("Transferring {} {} from account {} to {}", currency, amount, fromAccountID, toAccountID);
-        try {
-            return lockService.runInLock(fromAccountID, toAccountID, () -> {
-                return transactionsRepository.transfer(fromAccountID, toAccountID, currency.toUpperCase(), amount);
-            });
-        } catch (Exception e) {
-            LOGGER.error("Error in transferring", e);
-        }
-        return false;
+        return lockService.runInLock(fromAccountID, toAccountID,
+                () -> transactionsRepository.transfer(fromAccountID, toAccountID, currency.toUpperCase(), amount));
     }
 }

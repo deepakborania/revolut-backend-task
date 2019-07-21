@@ -67,6 +67,19 @@ public class AccountsHandler {
         };
     }
 
+    public Route closeAccount() {
+        return (req, res) -> {
+            String accountID = req.params(":id");
+            if (StringUtils.isBlank(accountID) || !StringUtils.isNumeric(accountID)) {
+                throw new Exception("Invalid account number");
+            }
+            boolean status = accountService.closeAccount(Integer.parseInt(accountID));
+            res.status(200);
+            res.type("application/json");
+            return BaseResponse.Builder.aBaseResponse().withMessage("Deleted");
+        };
+    }
+
     public Route depositAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);

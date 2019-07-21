@@ -67,4 +67,20 @@ public class AccountsRepositoryImpl implements AccountsRepository {
         return Optional.of(result[0]);
     }
 
+    @Override
+    public Boolean closeAccount(int accountID) {
+        boolean result = false;
+        dbManager.getDSL().transaction(configuration -> {
+            AccountRecord accRecord = dbManager.getDSL().selectFrom(ACCOUNT)
+                    .where(ACCOUNT.ID.eq(accountID))
+                    .fetchOne();
+            if(accRecord==null){
+                throw new AccountNotFoundException(accountID);
+            }
+            accRecord.setActive(false);
+            accRecord.store();
+        });
+        return true;
+    }
+
 }
