@@ -11,4 +11,6 @@ public interface TransactionsRepository {
     List<Transactions> fetchAllTransactions(int id);
 
     Optional<Account> depositMoneyInAccount(int id, String curr, BigDecimal amount);
+
+    boolean transfer(int fromAccountID, int toAccountID, String toUpperCase, BigDecimal amount);
 }

@@ -36,11 +36,24 @@ public class TransactionServiceImpl implements TransactionService {
     public boolean deposit(int id, String curr, BigDecimal amount) {
         LOGGER.info("Depositing {} {} amount in account# {}", curr, amount, id);
         try {
-            lockService.runInLock(id, () -> transactionsRepository.depositMoneyInAccount(id, curr, amount).get());
+            lockService.runInLock(id, () -> transactionsRepository.depositMoneyInAccount(id, curr.toUpperCase(), amount).get());
             return true;
         } catch (Exception e) {
             LOGGER.error("Error in depositing {} {} amount in account# {}", curr, amount, id);
             return false;
         }
+    }
+
+    @Override
+    public boolean transfer(int fromAccountID, int toAccountID, String currency, BigDecimal amount) {
+        LOGGER.info("Transferring {} {} from account {} to {}", currency, amount, fromAccountID, toAccountID);
+        try {
+            return lockService.runInLock(fromAccountID, toAccountID, () -> {
+                return transactionsRepository.transfer(fromAccountID, toAccountID, currency.toUpperCase(), amount);
+            });
+        } catch (Exception e) {
+            LOGGER.error("Error in transferring", e);
+        }
+        return false;
     }
 }

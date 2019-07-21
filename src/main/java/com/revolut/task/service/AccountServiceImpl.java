@@ -2,6 +2,7 @@ package com.revolut.task.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.revolut.task.di.InjectorProvider;
 import com.revolut.task.models.tables.pojos.Account;
 import com.revolut.task.repositories.AccountsRepository;
 import org.slf4j.Logger;
@@ -15,10 +16,12 @@ public class AccountServiceImpl implements AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private final AccountsRepository accountsRepository;
+    private final LockService lockService;
 
     @Inject
     public AccountServiceImpl(AccountsRepository accountsRepository) {
-        this.accountsRepository = accountsRepository;
+        this.accountsRepository = InjectorProvider.provide().getInstance(AccountsRepository.class);
+        this.lockService = InjectorProvider.provide().getInstance(LockService.class);
     }
 
     @Override
@@ -33,7 +36,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccount(int id) {
         LOGGER.info("Fetching account, id: {}", id);
-        return accountsRepository.getAccountByID(id).orElse(null);
-
+        try {
+            return lockService.runInLock(id, () -> accountsRepository.getAccountByID(id).orElse(null));
+        } catch (Exception e) {
+            LOGGER.error("Error in fetching account", e);
+        }
+        return null;
     }
 }

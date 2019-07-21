@@ -10,7 +10,6 @@ import com.revolut.task.models.tables.pojos.Account;
 import com.revolut.task.models.tables.pojos.Transactions;
 import com.revolut.task.models.tables.records.AccountRecord;
 import com.revolut.task.models.tables.records.CurrencyRecord;
-import com.revolut.task.service.LockService;
 import org.jooq.Configuration;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
@@ -51,14 +50,24 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         final Account[] result = new Account[1];
 
         dbManager.getDSL().transaction(configuration -> {
-            AccountRecord accountRecord = depositMoney(configuration, id, curr, amount);
+            AccountRecord accountRecord = depositMoney(configuration, id, curr, amount, true);
             result[0] = accountRecord.into(Account.class);
         });
 
         return Optional.of(result[0]);
     }
 
-    private AccountRecord depositMoney(Configuration configuration, int id, String curr, BigDecimal amount) {
+    @Override
+    public boolean transfer(int fromAccountID, int toAccountID, String currency, BigDecimal amount) {
+        dbManager.getDSL().transaction(configuration -> {
+            depositMoney(configuration, fromAccountID, currency, amount.negate(), false);
+            depositMoney(configuration, toAccountID, currency, amount, false);
+            saveTransactionHistory(configuration, fromAccountID, toAccountID, amount, amount, currency);
+        });
+        return true;
+    }
+
+    private AccountRecord depositMoney(Configuration configuration, int id, String curr, BigDecimal amount, boolean writeTXNToLog) {
         CurrencyRecord currencyRecord = DSL.using(configuration).selectFrom(CURRENCY)
                 .where(CURRENCY.CODE.eq(curr))
                 .fetchOne();
@@ -84,10 +93,12 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         }
         accountRecord.setBalance(accountRecord.getBalance().add(normAmt));
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            saveTransactionHistory(configuration, id, 0, amount, normAmt, curr);
-        } else {
-            saveTransactionHistory(configuration, 0, id, amount, normAmt, curr);
+        if (writeTXNToLog) {
+            if (amount.compareTo(BigDecimal.ZERO) < 0) {
+                saveTransactionHistory(configuration, id, 0, amount, normAmt, curr);
+            } else {
+                saveTransactionHistory(configuration, 0, id, amount, normAmt, curr);
+            }
         }
         accountRecord.store();
         return accountRecord;
