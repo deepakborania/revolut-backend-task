@@ -9,6 +9,9 @@ import com.revolut.task.repositories.TransactionsRepository;
 import com.revolut.task.repositories.TransactionsRepositoryImpl;
 import com.revolut.task.service.*;
 
+/**
+ * Marks classes available for injection for a given interface
+ */
 public class ApplicationInjectorModule extends AbstractModule {
 
     @Override

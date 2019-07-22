@@ -4,6 +4,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.revolut.task.di.ApplicationInjectorModule;
 
+/**
+ * Initializes Guice
+ */
 public class InjectorProvider {
     private static Injector injector;
 

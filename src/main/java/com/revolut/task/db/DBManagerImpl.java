@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Provides the {@link DSLContext} to repositories for performing database functions.
+ */
 @Singleton
 public class DBManagerImpl implements DBManager {
     public static final Logger LOGGER = LoggerFactory.getLogger(DBManagerImpl.class);
@@ -19,6 +22,9 @@ public class DBManagerImpl implements DBManager {
     private DataSource dataSource;
     private DSLContext dslContext;
 
+    /**
+     * Initializes the database conncetion and migrates by reading in configuration from resources/db.properties
+     */
     public DBManagerImpl() {
         ComboPooledDataSource cDataSource;
         try {

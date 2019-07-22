@@ -13,6 +13,10 @@ import spark.Route;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * TransactionsHandler contains the HTTP handler for all the requests related to transactions.
+ * It hands off the request handling to corresponding services.
+ */
 public class TransactionsHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionsHandler.class);

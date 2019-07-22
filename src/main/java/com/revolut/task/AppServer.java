@@ -10,6 +10,9 @@ import spark.Spark;
 
 import static spark.Spark.*;
 
+/**
+ * AppsServer is the starting point for the whole application.
+ */
 public class AppServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppServer.class);
@@ -17,10 +20,13 @@ public class AppServer {
 
     private AccountsHandler accountHandlers;
     private TransactionsHandler transactionsHandlers;
-    private Configuration configuration;
 
+    /**
+     * startServer reads in the command line arguments and sets up the routes and starts the server on the provided port.
+     * @param args Command line arguments
+     */
     public void startServer(String... args) {
-        configuration = new Configuration();
+        Configuration configuration = new Configuration();
         new JCommander(configuration, args);
         System.getProperties().setProperty("org.jooq.no-logo", "true");
         port(configuration.getPort());
@@ -54,6 +60,9 @@ public class AppServer {
         Spark.awaitStop();
     }
 
+    /**
+     * Register various account related handlers
+     */
     private void registerAccountHandlers() {
         path("/accounts", () -> {
             get("/:id", this.accountHandlers.getAccountById(), json);
@@ -64,6 +73,9 @@ public class AppServer {
         });
     }
 
+    /**
+     * Register various transaction related handlers
+     */
     private void registerTransactionHandlers() {
         path("/txn", () -> {
             get("/:id", this.transactionsHandlers.fetchTransactions(), json);

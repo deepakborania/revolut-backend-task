@@ -35,6 +35,12 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         this.accountsRepository = InjectorProvider.provide().getInstance(AccountsRepository.class);
     }
 
+    /**
+     * Fetches all the transactions in which the given account is involved
+     *
+     * @param id Account ID to look for.
+     * @return List of {@link Transactions}
+     */
     @Override
     public List<Transactions> fetchAllTransactions(int id) {
         final List<Transactions> result = new ArrayList<>();
@@ -46,6 +52,18 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         return result;
     }
 
+    /**
+     * This service is called by deposit and withdrawal handlers.
+     *
+     * @param id     Account ID to deposit in or withdraw from
+     * @param curr   Currency of transaction
+     * @param amount Amount of transaction
+     * @return Optional with updated account
+     * @throws com.revolut.task.exceptions.CurrencyNotFoundException if invalid currency
+     * @throws com.revolut.task.exceptions.AccountNotFoundException  if the account is not found
+     * @throws com.revolut.task.exceptions.AccountInactiveException  if the account has been closed
+     * @throws com.revolut.task.exceptions.NegativeBalanceException  if this transaction will result in negative balance for the account
+     */
     @Override
     public Optional<Account> depositMoneyInAccount(int id, String curr, BigDecimal amount) {
         final Account[] result = new Account[1];
@@ -58,6 +76,19 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         return Optional.of(result[0]);
     }
 
+
+    /**
+     * This repository function is called by deposit and withdrawal handlers.
+     *
+     * @param fromAccountID Account ID to deposit in or withdraw from
+     * @param toAccountID   Currency of transaction
+     * @param amount        Amount of transaction
+     * @return true if successful else false
+     * @throws com.revolut.task.exceptions.CurrencyNotFoundException if invalid currency
+     * @throws com.revolut.task.exceptions.AccountNotFoundException  if the account is not found
+     * @throws com.revolut.task.exceptions.AccountInactiveException  if the account has been closed
+     * @throws com.revolut.task.exceptions.NegativeBalanceException  if this transaction will result in negative balance for the account
+     */
     @Override
     public boolean transfer(int fromAccountID, int toAccountID, String currency, BigDecimal amount) {
         dbManager.getDSL().transaction(configuration -> {
@@ -68,6 +99,7 @@ public class TransactionsRepositoryImpl implements TransactionsRepository {
         return true;
     }
 
+    // This function implements repository function for depositing or withdrawing from an account.
     private AccountRecord depositMoney(Configuration configuration, int id, String curr, BigDecimal amount, boolean writeTXNToLog) {
         CurrencyRecord currencyRecord = DSL.using(configuration).selectFrom(CURRENCY)
                 .where(CURRENCY.CODE.eq(curr))

@@ -10,8 +10,19 @@ import java.util.concurrent.locks.ReentrantLock;
 @Singleton
 public class LockServiceImpl implements LockService {
 
+    // Map with account and their locks
     private final Map<Integer, ReentrantLock> locks = new ConcurrentHashMap<>();
 
+    /**
+     * Account locking service for transactions with two accounts involved
+     *
+     * @param accID1   First account ID to lock
+     * @param accID2   Second account ID to lock
+     * @param callable {@link Callable} to perform required operation
+     * @param <E>      Type return by the callable
+     * @return Whatever the callable returns
+     * @throws Exception on any exception
+     */
     @Override
     public <E> E runInLock(int accID1, int accID2, Callable<E> callable) throws Exception {
         locks.putIfAbsent(accID1, new ReentrantLock());
@@ -37,6 +48,15 @@ public class LockServiceImpl implements LockService {
         }
     }
 
+    /**
+     * Account locking service for transactions with only one account involved/
+     *
+     * @param accID1   Account ID to lock
+     * @param callable {@link Callable} to perform required operation
+     * @param <E>      Type return by the callable
+     * @return Whatever the callable returns
+     * @throws Exception on any exception
+     */
     @Override
     public <E> E runInLock(int accID1, Callable<E> callable) throws Exception {
         locks.putIfAbsent(accID1, new ReentrantLock());

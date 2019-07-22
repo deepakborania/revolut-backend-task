@@ -14,6 +14,10 @@ import spark.Route;
 
 import java.math.BigDecimal;
 
+/**
+ * AccountsHandler contains the HTTP handler for all the requests related to accounts.
+ * It hands off the request handling to corresponding services.
+ */
 public class AccountsHandler {
 
     private final AccountService accountService;
@@ -27,6 +31,11 @@ public class AccountsHandler {
         this.transactionService = InjectorProvider.provide().getInstance(TransactionService.class);
     }
 
+    /**
+     * Handler for getting an account
+     *
+     * @return Account Details
+     */
     public Route getAccountById() {
         return (req, resp) -> {
             String id = req.params(":id");
@@ -49,6 +58,11 @@ public class AccountsHandler {
         };
     }
 
+    /**
+     * Handles account creation
+     *
+     * @return CreateAccountResponse with details of newly created account
+     */
     public Route createAccount() {
         return (req, res) -> {
             CreateAccountRequest car = gson.fromJson(req.body(), CreateAccountRequest.class);
@@ -67,6 +81,11 @@ public class AccountsHandler {
         };
     }
 
+    /**
+     * handler for clsoing an account
+     *
+     * @return Success or failures
+     */
     public Route closeAccount() {
         return (req, res) -> {
             String accountID = req.params(":id");
@@ -80,6 +99,11 @@ public class AccountsHandler {
         };
     }
 
+    /**
+     * Handles amount deposit in the account
+     *
+     * @return Status of transaction
+     */
     public Route depositAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
@@ -99,6 +123,11 @@ public class AccountsHandler {
         };
     }
 
+    /**
+     * Handles amount withdrawal in the account
+     *
+     * @return Status of transaction
+     */
     public Route withdrawAmount() {
         return (req, resp) -> {
             validateDepositRequest(req);
