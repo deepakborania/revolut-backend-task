@@ -1,7 +1,7 @@
 # Revolut Backend Task
 This is an implementation for Revolut Money transfer API for the coding challenge.
 
-###Steps to run:
+### Steps to run:
 - `mvn test` : To run the test cases
 - `mvn package`: To create a new jar in the target folder (`target/moneytransfer-1.0-SNAPSHOT.jar`)
 - `java -jar moneytransfer-1.0-SNAPSHOT.jar`: To startup the server on default 8080 port
@@ -44,7 +44,7 @@ Following end points have been implemented:
 |/api/txn/transfer/:fromID/:toID/:currency/:amount|POST|Transfer money from account *fromID* to *toID* with the given currency|` curl -X POST localhost:8080/api/txn/transfer/10002/10001/GBP/10`|
 |/api/txn/:id|GET|Get list of all transactions which involves this account|`curl localhost:8080/api/txn/10001`|
 
-Package Description:
+### Code Description:
 - **com.revolut.task.AppServer** is the main class for the application.It starts up the server and setups all different routes handled by the server.
 - **com.revolut.api** package contains all the endpoint handlers.
 - **com.revolut.task.db** package contains all the database related classes. **com.revolut.task.db.DBManagerImpl** is responsible for connecting to the database and migrating the data from `V1__createtablesanddata.sql`. 
