@@ -2,7 +2,9 @@
 This is an implementation for Revolut Money transfer API for the coding challenge.
 
 ###Steps to run:
-- mvn test : To run the test cases
+- `mvn test` : To run the test cases
+- `mvn package`: To create a new jar in the target folder (`target/moneytransfer-1.0-SNAPSHOT.jar`)
+- `java -jar moneytransfer-1.0-SNAPSHOT.jar`: To startup the server
 
 
 I have used following frameworks/libraries for this task:

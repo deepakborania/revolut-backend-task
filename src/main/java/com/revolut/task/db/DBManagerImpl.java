@@ -10,29 +10,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Singleton
 public class DBManagerImpl implements DBManager {
     public static final Logger LOGGER = LoggerFactory.getLogger(DBManagerImpl.class);
 
     private DataSource dataSource;
-    private final DSLContext dslContext;
+    private DSLContext dslContext;
 
     public DBManagerImpl() {
-        ComboPooledDataSource cDataSource = new ComboPooledDataSource();
+        ComboPooledDataSource cDataSource;
         try {
-            cDataSource.setDriverClass("org.h2.Driver");
+            Properties properties = new Properties();
+            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("db.properties"));
+            cDataSource = new ComboPooledDataSource();
 
-            cDataSource.setUser("");
-            cDataSource.setPassword("");
-//            cDataSource.setJdbcUrl("jdbc:h2:file:./my_db");
-            cDataSource.setJdbcUrl("jdbc:h2:mem:my_db");
+            cDataSource.setDriverClass(properties.getProperty("db.driver"));
+            cDataSource.setJdbcUrl(properties.getProperty("db.url"));
+            cDataSource.setUser(properties.getProperty("db.username"));
+            cDataSource.setPassword(properties.getProperty("db.password"));
 //            cDataSource.setConnectionCustomizerClassName("com.revolut.task.db.IsolationLevelCustomizer");
+            this.dataSource = cDataSource;
+            this.dslContext = DSL.using(cDataSource, SQLDialect.H2);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.dataSource = cDataSource;
-        this.dslContext = DSL.using(cDataSource, SQLDialect.H2);
 
         LOGGER.info("Migrating database...");
         Flyway flyway = new Flyway();
