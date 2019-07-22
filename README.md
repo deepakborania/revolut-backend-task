@@ -4,7 +4,8 @@ This is an implementation for Revolut Money transfer API for the coding challeng
 ###Steps to run:
 - `mvn test` : To run the test cases
 - `mvn package`: To create a new jar in the target folder (`target/moneytransfer-1.0-SNAPSHOT.jar`)
-- `java -jar moneytransfer-1.0-SNAPSHOT.jar`: To startup the server
+- `java -jar moneytransfer-1.0-SNAPSHOT.jar`: To startup the server on default 8080 port
+- `java -jar target/moneytransfer-1.0-SNAPSHOT.jar -port 9090`: TO start server on a user specified port
 
 
 I have used following frameworks/libraries for this task:

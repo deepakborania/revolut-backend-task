@@ -1,5 +1,6 @@
 package com.revolut.task;
 
+import com.beust.jcommander.JCommander;
 import com.revolut.task.api.AccountsHandler;
 import com.revolut.task.api.TransactionsHandler;
 import com.revolut.task.utils.JsonTransformer;
@@ -16,10 +17,13 @@ public class AppServer {
 
     private AccountsHandler accountHandlers;
     private TransactionsHandler transactionsHandlers;
+    private Configuration configuration;
 
-    public void startServer() {
+    public void startServer(String... args) {
+        configuration = new Configuration();
+        new JCommander(configuration, args);
         System.getProperties().setProperty("org.jooq.no-logo", "true");
-        port(8080);
+        port(configuration.getPort());
 
         this.accountHandlers = new AccountsHandler();
         this.transactionsHandlers = new TransactionsHandler();
@@ -69,6 +73,6 @@ public class AppServer {
 
     public static void main(String[] args) {
         AppServer app = new AppServer();
-        app.startServer();
+        app.startServer(args);
     }
 }
